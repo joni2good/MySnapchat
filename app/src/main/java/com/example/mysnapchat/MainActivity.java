@@ -1,31 +1,38 @@
 package com.example.mysnapchat;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.EditText;
 
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.mysnapchat.adapter.Adapter;
 import com.example.mysnapchat.models.MyImage;
+import com.example.mysnapchat.models.Pin;
+import com.example.mysnapchat.repos.MapRepo;
 import com.example.mysnapchat.repos.Repo;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements Updateable{
+public class MainActivity extends AppCompatActivity implements Updateable {
 
     List<MyImage> images = new ArrayList();
     static String username = "Default username";
@@ -34,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements Updateable{
     Adapter adapter;
     Button sendButton;
     Button setUsername;
+    Button openMap;
     TextView editImageText;
     TextView textUsername;
 
@@ -47,13 +55,25 @@ public class MainActivity extends AppCompatActivity implements Updateable{
         editImageText = findViewById(R.id.editImageText);
         setUsername = findViewById(R.id.setUsername);
         textUsername = findViewById(R.id.textUsername);
+        openMap = findViewById(R.id.mapButton);
 
         adapter = new Adapter(images, this);
         listView.setAdapter(adapter);
 
         Repo.r().setup(this, images);
 
+        startListListener();
 
+        try {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void startListListener() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -67,27 +87,22 @@ public class MainActivity extends AppCompatActivity implements Updateable{
                 startActivity(imageIntent);
             }
         });
-
-        sendButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dispatchTakePictureIntent();
-            }
-        });
-
-        setUsername.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (textUsername.getText().toString().equals("")){
-                    username = "all";
-                }else {
-                    username = textUsername.getText().toString();
-                }
-            }
-        });
     }
 
-    private void dispatchTakePictureIntent() {
+    public void onUsernameClick(View v) {
+        if (textUsername.getText().toString().equals("")) {
+            username = "all";
+        } else {
+            username = textUsername.getText().toString();
+        }
+    }
+
+    public void startMapIntent(View view) {
+        Intent mapIntent = new Intent(MainActivity.this, MapsActivity.class);
+        startActivity(mapIntent);
+    }
+
+    public void dispatchTakePictureIntent(View view) {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             startActivityForResult(takePictureIntent, 1);
@@ -104,6 +119,25 @@ public class MainActivity extends AppCompatActivity implements Updateable{
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageBitmap = Repo.r().drawTextToBitmap(imageBitmap, editImageText.getText().toString());
             Repo.r().addImage(new MyImage(username, imageBitmap, editImageText.getText().toString()));
+
+            LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+            try {
+                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                System.out.println(location.getLatitude() + " " + location.getLongitude());
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                MapRepo.r().addPin(username, latLng);
+//                Pin tempPin = MapRepo.r().checkPinExists(username);
+//                if (tempPin.getId().equals("CreateNew")) {
+//                }else {
+//                    System.out.println("We're updating");
+//                    tempPin.setLatLng(latLng);
+//                    MapRepo.r().updatePin(tempPin);
+//                }
+            }catch (Exception e){
+                Toast.makeText(this, "Can't update location, permission denied", Toast.LENGTH_LONG).show();
+            }
+
             editImageText.setText("");
         }
     }
