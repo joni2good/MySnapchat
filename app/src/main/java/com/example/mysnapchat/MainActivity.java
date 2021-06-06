@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -24,7 +23,6 @@ import android.widget.Toast;
 
 import com.example.mysnapchat.adapter.Adapter;
 import com.example.mysnapchat.models.MyImage;
-import com.example.mysnapchat.models.Pin;
 import com.example.mysnapchat.repos.MapRepo;
 import com.example.mysnapchat.repos.Repo;
 import com.google.android.gms.maps.model.LatLng;
@@ -36,9 +34,9 @@ public class MainActivity extends AppCompatActivity implements Updateable {
 
     List<MyImage> images = new ArrayList();
     static String username = "Default username";
+    Adapter adapter;
 
     ListView listView;
-    Adapter adapter;
     Button sendButton;
     Button setUsername;
     Button openMap;
@@ -63,14 +61,7 @@ public class MainActivity extends AppCompatActivity implements Updateable {
         Repo.r().setup(this, images);
 
         startListListener();
-
-        try {
-            if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        getPermission();
     }
 
     public void startListListener() {
@@ -83,7 +74,6 @@ public class MainActivity extends AppCompatActivity implements Updateable {
                 imageIntent.putExtra("text", tempImg.getText());
                 imageIntent.putExtra("id", tempImg.getId());
                 imageIntent.putExtra("user", tempImg.getUser());
-//                System.out.println(tempImg.getId() + " " + tempImg.getUser() + " " + tempImg.getText());
                 startActivity(imageIntent);
             }
         });
@@ -97,6 +87,16 @@ public class MainActivity extends AppCompatActivity implements Updateable {
         }
     }
 
+    public void getPermission(){
+        try {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 101);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void startMapIntent(View view) {
         Intent mapIntent = new Intent(MainActivity.this, MapsActivity.class);
         startActivity(mapIntent);
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements Updateable {
         try {
             startActivityForResult(takePictureIntent, 1);
         } catch (ActivityNotFoundException e) {
-            // display error state to the user
+            System.out.println("Can't take picture, activity not found: " + e);
         }
     }
 
@@ -127,13 +127,6 @@ public class MainActivity extends AppCompatActivity implements Updateable {
                 System.out.println(location.getLatitude() + " " + location.getLongitude());
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 MapRepo.r().addPin(username, latLng);
-//                Pin tempPin = MapRepo.r().checkPinExists(username);
-//                if (tempPin.getId().equals("CreateNew")) {
-//                }else {
-//                    System.out.println("We're updating");
-//                    tempPin.setLatLng(latLng);
-//                    MapRepo.r().updatePin(tempPin);
-//                }
             }catch (Exception e){
                 Toast.makeText(this, "Can't update location, permission denied", Toast.LENGTH_LONG).show();
             }

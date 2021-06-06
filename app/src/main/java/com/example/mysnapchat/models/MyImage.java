@@ -8,12 +8,12 @@ public class MyImage {
     private Bitmap imageBitmap;
     private String text;
 
-    public MyImage(String id, String user, Bitmap imageBitmap, String text) {
-        this.id = id;
-        this.user = user;
-        this.imageBitmap = imageBitmap;
-        this.text = text;
-    }
+//    public MyImage(String id, String user, Bitmap imageBitmap, String text) {
+//        this.id = id;
+//        this.user = user;
+//        this.imageBitmap = imageBitmap;
+//        this.text = text;
+//    }
 
     public MyImage(String id, String user, String text) {
         this.id = id;
@@ -27,8 +27,8 @@ public class MyImage {
         this.text = text;
     }
 
-    public MyImage() {
-    }
+//    public MyImage() {
+//    }
 
     public String getId() {
         return id;
@@ -42,23 +42,23 @@ public class MyImage {
         return user;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
+//    public void setUser(String user) {
+//        this.user = user;
+//    }
 
     public Bitmap getImageBitmap() {
         return imageBitmap;
     }
 
-    public void setImageBitmap(Bitmap imageBitmap) {
-        this.imageBitmap = imageBitmap;
-    }
+//    public void setImageBitmap(Bitmap imageBitmap) {
+//        this.imageBitmap = imageBitmap;
+//    }
 
     public String getText() {
         return text;
     }
 
-    public void setText(String text) {
-        this.text = text;
-    }
+//    public void setText(String text) {
+//        this.text = text;
+//    }
 }

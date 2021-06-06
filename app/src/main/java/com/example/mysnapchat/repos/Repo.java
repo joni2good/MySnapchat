@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.example.mysnapchat.MainActivity;
 import com.example.mysnapchat.TaskListener;
 import com.example.mysnapchat.Updateable;
 import com.example.mysnapchat.models.MyImage;
@@ -51,13 +50,10 @@ public class Repo {
         System.out.println("Inserted " + reference.getId());
     }
 
-    public List<MyImage> getImages() {
-        return images;
-    }
+//    public List<MyImage> getImages() {
+//        return images;
+//    }
 
-    // This is an important method because it connects the view with our data, we choose what data is relevant and collect that so that other methods can access the correct parts of our IMG storage
-    // Without this method the view isn't updated and the view can't reference image id and therefor cant use other methods
-    // The method waits for a change to happen and then it gets the necessary data when it happens
     public void startListener(){
         db.collection(COLLECTION).addSnapshotListener((values, error) -> {
             images.clear();
@@ -88,9 +84,6 @@ public class Repo {
         });
     }
 
-    // This method is important because without it we can't display an image
-    // The method relies on startListener, but is equally important because we need the image.
-    // The method gets the bytes needed to create the image and then calls a method in ImageActivity that converts it to the necessary data
     public void downloadBitmap(String id, TaskListener taskListener){
         StorageReference reference = storage.getReference(id);
         int max = 1024 * 1024;

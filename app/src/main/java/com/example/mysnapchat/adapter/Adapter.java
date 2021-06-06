@@ -35,7 +35,6 @@ public class Adapter extends BaseAdapter {
 
     @Override
     public long getItemId(int position) {
-
         return position;
     }
 
@@ -47,7 +46,7 @@ public class Adapter extends BaseAdapter {
         ConstraintLayout constraintLayout = (ConstraintLayout) view;
         TextView userText = view.findViewById((R.id.userText));
         TextView textView = view.findViewById(R.id.textView);
-        TextView textView1 = view.findViewById(R.id.content);
+//        TextView textView1 = view.findViewById(R.id.content);
         if (userText != null) {
             userText.setText(items.get(position).getUser());
         }

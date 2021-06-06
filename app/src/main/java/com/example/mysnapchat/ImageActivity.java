@@ -25,7 +25,6 @@ public class ImageActivity extends AppCompatActivity implements TaskListener {
         Intent intent = getIntent();
         myImage = new MyImage(intent.getStringExtra("id"), intent.getStringExtra("user"), intent.getStringExtra("text"));
         Repo.r().downloadBitmap(myImage.getId(), this);
-
     }
 
     @Override

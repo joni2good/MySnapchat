@@ -3,14 +3,10 @@ package com.example.mysnapchat.repos;
 import com.example.mysnapchat.Updateable;
 import com.example.mysnapchat.models.Pin;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,8 +35,8 @@ public class MapRepo {
         Map<String, Object> map = new HashMap();
         map.put("name", name);
         map.put("latLng", new GeoPoint(latLng.latitude, latLng.longitude));
-        reference.set(map); // replaces previous values unless SetOption.merge()
-        System.out.println("Inserted " + reference.getId());
+        reference.set(map); // replaces previous values unless SetOptions.merge()
+        System.out.println("Inserted pin" + reference.getId());
     }
 
     public void updatePin(Pin pin){
@@ -51,34 +47,6 @@ public class MapRepo {
         reference.update(map); // update previous values
         System.out.println("Updated " + reference.getId());
     }
-
-//    public Pin checkPinExists(String name) {
-//        Pin tempPin = new Pin();
-//        List<Pin> pinList = getPins();
-//        for (Pin pin : pinList) {
-//            System.out.println(pin.getName() + " and name " + name);
-//            if (pin.getName().equals(name)) {
-//                System.out.println("Pin name and id" + pin.getName() + pin.getId());
-//                return pin;
-//            }
-//        }
-//        tempPin.setId("CreateNew");
-//        return tempPin;
-//    }
-//
-//    public synchronized List<Pin> getPins() {
-//        List<Pin> returnPins = new ArrayList();
-//        db.collection(COLLECTION).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-//            @Override
-//            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-//                for (QueryDocumentSnapshot qds : queryDocumentSnapshots) {
-//                    GeoPoint pos = qds.getGeoPoint("latLng");
-//                    returnPins.add(new Pin(qds.getId(), qds.get("name").toString(), new LatLng(pos.getLatitude(), pos.getLongitude())));
-//                }
-//            }
-//        });
-//        return returnPins;
-//    }
 
     public void startListener(){
         db.collection(COLLECTION).addSnapshotListener((values, error) -> {
@@ -94,8 +62,10 @@ public class MapRepo {
                         System.out.println("Error getting documents");
                     }
                 }
+                activity.update(null);
+            }else {
+                System.out.println("Pin listener failed with: " + error);
             }
-            activity.update(null);
         });
     }
 
