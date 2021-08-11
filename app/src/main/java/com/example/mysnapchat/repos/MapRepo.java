@@ -70,7 +70,8 @@ public class MapRepo {
     }
 
     public void deletePin(Pin pin){
-        DocumentReference documentReference = db.collection(COLLECTION).document(pin.getId());
-        documentReference.delete();
+        db.collection(COLLECTION).document(pin.getId()).delete();
+//        DocumentReference documentReference = db.collection(COLLECTION).document(pin.getId());
+//        documentReference.delete();
     }
 }

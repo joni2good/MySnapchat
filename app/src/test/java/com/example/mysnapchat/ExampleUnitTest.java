@@ -14,4 +14,17 @@ public class ExampleUnitTest {
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);
     }
+
+    @Test
+    public void isEven_isCorrect(){
+        assertTrue(isEven(5));
+        assertTrue(isEven(56));
+    }
+
+    public boolean isEven(int input){
+        if (input % 2 != 0){
+            return false;
+        }
+        return true;
+    }
 }
