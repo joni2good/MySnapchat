@@ -19,6 +19,8 @@ allprojects {
     }
 }
 
+apply plugin: 'com.gradle.build-scan'
+
 if (hasProperty('buildScan')) {
     buildScan {
         termsOfServiceUrl = 'https://gradle.com/terms-of-service'
