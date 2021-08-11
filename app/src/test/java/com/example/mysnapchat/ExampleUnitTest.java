@@ -17,7 +17,7 @@ public class ExampleUnitTest {
 
     @Test
     public void isEven_isCorrect(){
-        assertTrue(isEven(4));
+        assertTrue(isEven(5));
         assertFalse(isEven(55));
     }
 
