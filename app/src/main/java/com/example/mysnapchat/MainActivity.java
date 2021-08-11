@@ -122,14 +122,14 @@ public class MainActivity extends AppCompatActivity implements Updateable {
 
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-            try {
+            /*try {
                 Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 System.out.println(location.getLatitude() + " " + location.getLongitude());
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 MapRepo.r().addPin(username, latLng);
             }catch (Exception e){
                 Toast.makeText(this, "Can't update location, permission denied", Toast.LENGTH_LONG).show();
-            }
+            }*/
 
             editImageText.setText("");
         }
