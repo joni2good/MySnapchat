@@ -12,6 +12,10 @@ buildscript {
     }
 }
 
+plugins {
+    id "org.sonarqube" version "3.3"
+}
+
 allprojects {
     repositories {
         google()
@@ -19,7 +23,6 @@ allprojects {
     }
 }
 
-apply plugin: 'com.gradle.build-scan'
 
 if (hasProperty('buildScan')) {
     buildScan {
