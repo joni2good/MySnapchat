@@ -122,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements Updateable {
 
             LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
+            //test
             /*try {
                 Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                 System.out.println(location.getLatitude() + " " + location.getLongitude());
