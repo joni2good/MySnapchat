@@ -10,6 +10,15 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
+    MainActivity mainActivity = new MainActivity();
+
+    @Test
+    public void checkTest_isWorking(){
+        assertEquals(1, mainActivity.checkTests('a'));
+        assertNotEquals(1, mainActivity.checkTests('b'));
+        assertEquals(0, mainActivity.checkTests('x'));
+    }
+
     @Test
     public void addition_isCorrect() {
         assertEquals(4, 2 + 2);

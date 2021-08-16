@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements Updateable {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        checkTests('a');
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -133,6 +134,27 @@ public class MainActivity extends AppCompatActivity implements Updateable {
             }*/
 
             editImageText.setText("");
+        }
+    }
+
+    public int checkTests(Character char1){
+        switch (char1) {
+            case 'a':
+                return 1;
+            case 'b':
+                return 2;
+            case 'c':
+                return 3;
+            case 'd':
+                return 4;
+            case 'e':
+                return 5;
+            case 'f':
+                return 6;
+            case 'g':
+                return 7;
+            default:
+                return 0;
         }
     }
 
